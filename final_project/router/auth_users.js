@@ -21,7 +21,9 @@ const isPasswordValid = (password) => {
 
 
 const authenticatedUser = (username,password)=>{ //returns boolean
-//write code to check if username and password match the one we have in records.
+  // Check if username and password match the records
+  const user = users.find(user => user.username === username && user.password === password);
+  return user ? true : false;
 }
 
 //only registered users can login
@@ -32,7 +34,7 @@ regd_users.post("/login", (req,res) => {
     return res.status(400).json({message: "Username and password are required"});
   }
   // Check if user exists and password is valid
-  if (!isValid(username) || !isPasswordValid(password)) {
+  if (!isValid(username) || !isPasswordValid(password) || !authenticatedUser(username, password)) {
     return res.status(401).json({message: "Invalid username or password"});
   }
   // Generate an access token
